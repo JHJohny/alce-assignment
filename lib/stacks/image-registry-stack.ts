@@ -5,10 +5,10 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 
 export interface RegistryStackProps extends cdk.StackProps {
   repositories: string[];
-  repoPrefix?: string;
+  repoPrefix: string;
 
   enablePullThroughCache?: boolean;
-  cachePrefix?: string;
+  cachePrefix: string;
   upstreamRegistryUrl?: string;
 }
 
@@ -18,10 +18,10 @@ export class RegistryStack extends SmartStack {
 
     const {
       repositories,
-      repoPrefix = 'app',
-      enablePullThroughCache = false,
-      cachePrefix = 'dockerhub',
-      upstreamRegistryUrl = 'registry-1.docker.io',  // Just for this assignment, otherwise I expect fully private ECR
+      repoPrefix,
+      enablePullThroughCache,
+      cachePrefix,
+      upstreamRegistryUrl,
     } = props;
 
     const isStable = EC.isStable(this);
