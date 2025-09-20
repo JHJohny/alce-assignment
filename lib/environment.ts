@@ -17,7 +17,7 @@ export class Environment extends EnvironmentWrapper {
       repoPrefix:  cfg.repoPrefix  ?? 'app',
       enablePullThroughCache: cfg.enablePullThroughCache ?? true,
       cachePrefix: cfg.cachePrefix ?? 'dockerhub',
-      upstreamRegistryUrl: cfg.upstreamRegistryUrl ?? 'registry-1.docker.io',  // Upstream just for this assignment, otherwise fully private ECR
+      upstreamRegistryUrl: cfg.upstreamRegistryUrl ?? 'public.ecr.aws',  // Upstream just for this assignment, otherwise fully private ECR
       description: 'ECR repository',
     });
 

@@ -10,7 +10,7 @@ export interface IdentityStackProps extends cdk.StackProps {
 }
 
 export class IdentityStack extends SmartStack {
-  constructor(scope: Construct, id: string, props?: IdentityStackProps) {
+  constructor(scope: Construct, id: string, props: IdentityStackProps) {
     super(scope, id, props);
 
     // TODO

@@ -13,7 +13,7 @@ export const project = new Project({
         repoPrefix: 'app',
         enablePullThroughCache: true,
         cachePrefix: 'dockerhub',
-        upstreamRegistryUrl: 'registry-1.docker.io',
+        upstreamRegistryUrl: 'public.ecr.aws',
       },
     },
     prod: {
@@ -23,7 +23,7 @@ export const project = new Project({
         repoPrefix: 'app',
         enablePullThroughCache: true,
         cachePrefix: 'dockerhub',
-        upstreamRegistryUrl: 'registry-1.docker.io',
+        upstreamRegistryUrl: 'public.ecr.aws',
       },
     },
   }),

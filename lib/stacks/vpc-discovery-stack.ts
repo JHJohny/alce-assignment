@@ -7,7 +7,7 @@ export interface VpcDiscoveryStackProps extends cdk.StackProps {
 }
 
 export class VpcDiscoveryStack extends SmartStack {
-  constructor(scope: Construct, id: string, props?: VpcDiscoveryStackProps) {
+  constructor(scope: Construct, id: string, props: VpcDiscoveryStackProps) {
     super(scope, id, props);
 
     // TODO

@@ -32,3 +32,6 @@ Thumbs.db
 /dist
 /build
 /.cache
+
+# CDK-specific
+/cdk.out

@@ -11,7 +11,7 @@ export interface AppStackProps extends cdk.StackProps {
 }
 
 export class AppStack extends SmartStack {
-  constructor(scope: Construct, id: string, props?: AppStackProps) {
+  constructor(scope: Construct, id: string, props: AppStackProps) {
     super(scope, id, props);
 
     // TODO

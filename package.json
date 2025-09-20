@@ -8,9 +8,9 @@
     "cdk": "cdk"
   },
   "devDependencies": {
+    "aws-cdk": "^2.1029.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.0",
-    "aws-cdk": "2.154.1"
+    "typescript": "^5.4.0"
   },
   "dependencies": {
     "@alma-cdk/project": "^1.0.0",

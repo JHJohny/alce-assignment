@@ -31,11 +31,11 @@ export class RegistryStack extends SmartStack {
                                    : ecr.TagMutability.MUTABLE;
     const lifecycleRules: ecr.LifecycleRule[] = isStable
     ? [
-      { tagStatus: ecr.TagStatus.UNTAGGED, maxImageCount: 5 },
-      ]
+      { rulePriority: 1, tagStatus: ecr.TagStatus.UNTAGGED, maxImageCount: 5 },
+    ]
     : [
-      { tagStatus: ecr.TagStatus.UNTAGGED, maxImageCount: 3 },
-      { tagStatus: ecr.TagStatus.TAGGED, maxImageCount: 6 },
+      { rulePriority: 1, tagStatus: ecr.TagStatus.UNTAGGED, maxImageCount: 3 },
+      { rulePriority: 2, tagStatus: ecr.TagStatus.ANY, maxImageCount: 6 },
     ];
     const scanOnPush = true;
 
