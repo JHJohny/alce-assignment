@@ -11,22 +11,20 @@ export const project = new Project({
       config: {
         repositories: ['backend'],
         repoPrefix: 'app',
-        enablePullThroughCache: true,
-        cachePrefix: 'dockerhub',
-        upstreamRegistryUrl: 'public.ecr.aws',
-      },
+        imageTag: 'dev',
+        imagePortMap: { backend: 8080 },
+      }
     },
     prod: {
       id: '738404842013',
       config: {
         repositories: ['backend', 'frontend'],
         repoPrefix: 'app',
-        enablePullThroughCache: true,
-        cachePrefix: 'dockerhub',
-        upstreamRegistryUrl: 'public.ecr.aws',
-      },
-    },
-  }),
+        imageTag: 'latest',
+        imagePortMap: { backend: 8080, frontend: 3000 },
+      }
+    }
+  })
 });
 
 new Environment(project);
