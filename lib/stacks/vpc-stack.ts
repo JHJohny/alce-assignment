@@ -53,6 +53,8 @@ export class VpcStack extends SmartStack {
       description: 'Interface VPC Endpoints SG',
       allowAllOutbound: true
     });
+
+    // TODO - do explicitly resources as well, not just IP
     this.interfaceEndpointSg.addIngressRule(ec2.Peer.ipv4(this.vpc.vpcCidrBlock), ec2.Port.tcp(443), 'HTTPS from VPC');
 
     if (enableS3Gateway) {
