@@ -62,10 +62,7 @@ export class Environment extends EnvironmentWrapper {
       containerEnv: cfg.containerEnv ?? { NODE_ENV: isStable ? 'production' : 'development' },
 
       network: {
-        albListenerPort: cfg.network?.albListenerPort ?? 8080,
-        albProtocol: cfg.network?.albProtocol ?? elbv2.ApplicationProtocol.HTTP,
         cfEnabled: true, //cfg.network?.cfEnabled ?? isStable,
-        cfOriginHttpPort: cfg.network?.cfOriginHttpPort ?? (cfg.network?.albListenerPort ?? 8080),
         originSecretHeaderName,
         originSecretHeaderValue,
       },
@@ -76,7 +73,7 @@ export class Environment extends EnvironmentWrapper {
         cpuTargetUtilizationPercent: cfg.scaling?.cpuTargetUtilizationPercent ?? 60,
         cpuScaleInCooldownSec: cfg.scaling?.cpuScaleInCooldownSec ?? 60,
         cpuScaleOutCooldownSec: cfg.scaling?.cpuScaleOutCooldownSec ?? 30,
-        reqPerTargetPerMin: cfg.scaling?.reqPerTargetPerMin ?? (isStable ? 120 : 100),
+        reqPerTargetPerMin: cfg.scaling?.reqPerTargetPerMin ?? (isStable ? 120 : 100), // TODO - make it per service as well
         reqScaleInCooldownSec: cfg.scaling?.reqScaleInCooldownSec ?? 60,
         reqScaleOutCooldownSec: cfg.scaling?.reqScaleOutCooldownSec ?? 30,
       },

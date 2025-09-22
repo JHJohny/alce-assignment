@@ -59,18 +59,16 @@ export class VpcStack extends SmartStack {
       const s3Ep = this.vpc.addGatewayEndpoint('S3Endpoint', {
         service: ec2.GatewayVpcEndpointAwsService.S3
       });
-      // TODO - fix it
-      s3Ep.addToPolicy(new iam.PolicyStatement({
-        principals: [new iam.AnyPrincipal()],
-        actions: ['s3:*'],
-        resources: ['*'],
-        conditions: { StringEquals: { 'aws:PrincipalAccount': this.account } },
-      }));
-
       s3Ep.addToPolicy(new iam.PolicyStatement({
         principals: [new iam.AnyPrincipal()],
         actions: ['s3:GetObject', 's3:HeadObject'],
         resources: ['arn:aws:s3:::prod-eu-north-1-starport-layer-bucket/*'],
+        conditions: {
+          StringEquals: {
+            'aws:PrincipalAccount': this.account,
+            // TODO - endpoint as well
+          },
+        },
       }));
     }
 
@@ -126,7 +124,7 @@ export class VpcStack extends SmartStack {
     });
 
     const flowLogGroup = new logs.LogGroup(this, 'VpcFlowLogs', {
-      retention: logs.RetentionDays.ONE_MONTH
+      retention: logs.RetentionDays.ONE_MONTH // TODO - move it to config and based on env
     });
     new ec2.FlowLog(this, 'VpcFlowLogsToCw', {
       resourceType: ec2.FlowLogResourceType.fromVpc(this.vpc),

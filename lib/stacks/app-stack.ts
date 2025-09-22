@@ -15,12 +15,9 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 
 export interface NetworkProps {
-  albListenerPort: number;
-  albProtocol: elbv2.ApplicationProtocol;
   cfEnabled: boolean;
-  cfOriginHttpPort?: number;
   originSecretHeaderName?: string;
-  originSecretHeaderValue?: string;
+  originSecretHeaderValue?: string;  // TODO - move this to secret manager or rotate it somehow
 }
 
 export interface ScalingProps {
@@ -88,11 +85,8 @@ export class AppStack extends SmartStack {
     const cfCert = acm.Certificate.fromCertificateArn(this, 'CfCertUSE1', 'arn:aws:acm:us-east-1:641691899998:certificate/f5e0c9f5-8e71-4eef-a635-e5b4c05c605b');
 
     const albSg = new ec2.SecurityGroup(this, 'AlbSg', { vpc, allowAllOutbound: true, description: 'ALB SG (public)' });
-    albSg.addIngressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(network.albListenerPort),
-      `Public ${network.albProtocol} ${network.albListenerPort}`
-    );
+    albSg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80),  'Public HTTP 80');
+    albSg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), 'Public HTTPS 443');
 
     const serviceSg = new ec2.SecurityGroup(this, 'ServiceSg', { vpc, allowAllOutbound: true, description: 'Service SG' });
 
@@ -119,7 +113,7 @@ export class AppStack extends SmartStack {
 
     const alb = new elbv2.ApplicationLoadBalancer(this, 'Alb', {
       vpc, internetFacing: true, securityGroup: albSg, vpcSubnets: albSubnets,
-      loadBalancerName: `alb`,
+      loadBalancerName: 'alb',
     });
 
     //const listener = alb.addListener(`Listener${network.albListenerPort}`, {
@@ -183,8 +177,8 @@ export class AppStack extends SmartStack {
     for (const name of repositories) {
       const port = imagePortMap[name]!;
       const td = new ecs.FargateTaskDefinition(this, `${name}TaskDef`, {
-        cpu: 256,
-        memoryLimitMiB: 512,
+        cpu: 256, // TODO
+        memoryLimitMiB: 512, // TODO
         executionRole: taskExecRole,
         taskRole,
         runtimePlatform: { cpuArchitecture: ecs.CpuArchitecture.X86_64 },
@@ -223,6 +217,9 @@ export class AppStack extends SmartStack {
           interval: cdk.Duration.seconds(30),
         },
       });
+
+      tg.enableCookieStickiness(cdk.Duration.minutes(5));
+      tg.setAttribute('slow_start.duration_seconds', '30');
 
       svc.attachToApplicationTargetGroup(tg);
 
@@ -386,6 +383,7 @@ export class AppStack extends SmartStack {
           //  ? cloudfront.CachePolicy.CACHING_DISABLED
           //  : cloudfront.CachePolicy.CACHING_OPTIMIZED,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
+          responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
         },
         enableLogging: true,
