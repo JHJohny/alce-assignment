@@ -271,7 +271,7 @@ export class AppStack extends SmartStack {
         httpsListener.addAction(`Public-${p}`, {
           priority: p++,
           conditions: [elbv2.ListenerCondition.pathPatterns([pub])],
-          action: elbv2.ListenerAction.fixedResponse(200, {
+          action: elbv2.ListenerAction.fixedResponse(200, { // TODO
             contentType: 'text/plain',
             messageBody: 'OK',
           }),
