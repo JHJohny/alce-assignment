@@ -249,6 +249,7 @@ export class AppStack extends SmartStack {
         maxCapacity: scaling.maxTasks,
       });
 
+      // TODO - scaling based on app not global one
       scalable.scaleOnCpuUtilization(`${name}CpuScale`, {
         targetUtilizationPercent: scaling.cpuTargetUtilizationPercent,
         scaleInCooldown: cdk.Duration.seconds(scaling.cpuScaleInCooldownSec),
